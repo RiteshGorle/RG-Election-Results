@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<!--------------------------------------------------->
+<!--------------- TITLE OF WEBSITE PAGE ------------->
+<!--------------------------------------------------->
+<title>Election_Results</title>
+
+<!--------------------------------------------------->
+<!--------------------- META SEO WORK --------------->
+<!--------------------------------------------------->
+    <meta charset="utf-8">
+  <meta name="description" content="this website is all about Election_Results">
+  <meta name="keywords" content="Election_Results">
+  <meta name="author" content="Ritesh Gorle">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+<!--------------------------------------------------->
+<!--------------------- FAVICON IMAGE --------------->
+<!--------------------------------------------------->
+<link rel="icon" type="favicon.png" href="favicon.png"> 
+
+
+<!--------------------------------------------------->
+<!--------------------- BOOTSTRAP 4 ----------------->
+<!--------------------------------------------------->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery library End -->
+
+
+
+
+<!--------------------------------------------------->
+<!-----------------Font Awesome Icon ---------------->
+<!--------------------------------------------------->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<!--------------------------------------------------->
+<!------------------ Font Awesome Kit --------------->
+<!--------------------------------------------------->
+<script src="https://kit.fontawesome.com/92c23805dd.js" crossorigin="anonymous"></script>
+
+<!--------------------------------------------------->
+<!----------------------- CSS ----------------------->
+<!--------------------------------------------------->
+<style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+        }
+        table, th, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+        th, td {
+            padding: 8px;
+        }
+    </style>
+
+
+</head>
+
+<body data-spy="scroll" >
+
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%=>  WebSite Name: Election_Results   <=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%=>       Made by: Ritesh Gorle       <=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%--> 
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%=>       Created: Sept. 2023         <=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%=>       Content: Election_Results   <=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+
+
+
+<!--------------------------------===============================------------------------------------->
+<!-------------------------------------= SECTION 01: CONTENT  =--------------------------------------->
+<!--------------------------------===============================------------------------------------->
+
+<!-------------------------------------= HEADING  =--------------------------------------->
+<h1 class="mt-2" align="center">Election Results</h1> <br> 
+
+<!-------------------------------------= FILE  =--------------------------------------->
+    <div align="center"><input type="file" id="fileInput" accept=".csv,.xls,.xlsx"></div> <br> <br>
+
+<!-------------------------------------= RESULTS  =--------------------------------------->
+    <div id="results" align="center">
+        <h2>Results</h2>
+        <p>Total Votes Cast: <span id="totalVotes">0</span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Votes</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody id="candidateResults">
+            </tbody>
+        </table>
+        <p>Winner: <span id="winner"></span></p>
+    </div>
+
+
+
+
+<!-------------------------------------= JAVASCRIPT  =--------------------------------------->
+    <script>
+        document.getElementById('fileInput').addEventListener('change', handleFile);
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const contents = e.target.result;
+                    processData(contents);
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function processData(data) {
+            const lines = data.split('\n');
+            let totalVotes = 0;
+            const candidateVotes = [0, 0, 0, 0, 0]; // Assuming 5 candidates
+            const candidateNames = ["Candidate1", "Candidate2", "Candidate3", "Candidate4", "Candidate5"]; // Update with actual candidate names
+
+            for (let i = 1; i < lines.length; i++) { // Skip the header row
+                const values = lines[i].split(',');
+                for (let j = 1; j <= 5; j++) {
+                    candidateVotes[j - 1] += parseInt(values[j]);
+                    totalVotes += parseInt(values[j]);
+                }
+            }
+
+            const candidateResults = document.getElementById('candidateResults');
+            candidateResults.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const percentage = ((candidateVotes[i] / totalVotes) * 100).toFixed(2);
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${candidateNames[i]}</td><td>${candidateVotes[i]}</td><td>${percentage}%</td>`;
+                candidateResults.appendChild(row);
+            }
+
+            document.getElementById('totalVotes').textContent = totalVotes;
+            
+            const winnerIndex = candidateVotes.indexOf(Math.max(...candidateVotes));
+            document.getElementById('winner').textContent = candidateNames[winnerIndex];
+        }
+    </script>
+
+<!--------------------------------===============================------------------------------------->
+<!-------------------------------------= SECTION 01: CONTENT  =--------------------------------------->
+<!--------------------------------===============================------------------------------------->
+
+
+    
+</body>
+</html>
